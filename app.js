@@ -9,6 +9,7 @@ const modal = document.getElementById('boneco-modal');
 const colorInput = document.getElementById('boneco-color');
 const angleInput = document.getElementById('boneco-angle');
 let selectedBoneco = null;
+const BONECO_SIZE = 200;
 
 function renderSessions() {
   sessionList.innerHTML = '';
@@ -34,9 +35,9 @@ function addBonecoFromData(b) {
   const el = createBoneco();
   el.style.left = b.x + 'px';
   el.style.top = b.y + 'px';
-  el.style.color = b.color;
-  el.style.transform = `rotate(${b.angle}deg)`;
+  el.dataset.color = b.color;
   el.dataset.angle = b.angle;
+  drawBoneco(el);
 }
 
 function saveCurrentSession() {
@@ -44,7 +45,7 @@ function saveCurrentSession() {
   const bonecos = [...circle.querySelectorAll('.boneco')].map(el => ({
     x: parseFloat(el.style.left),
     y: parseFloat(el.style.top),
-    color: el.style.color,
+    color: el.dataset.color,
     angle: parseFloat(el.dataset.angle || 0)
   }));
   sessions[currentSession].bonecos = bonecos;
@@ -53,17 +54,19 @@ function saveCurrentSession() {
 }
 
 function createBoneco() {
-  const el = document.createElement('div');
+  const el = document.createElement('canvas');
   el.className = 'boneco';
-  el.textContent = '🧍';
-  el.style.color = '#000';
+  el.width = BONECO_SIZE;
+  el.height = BONECO_SIZE;
   el.style.left = '0px';
   el.style.top = '0px';
   el.dataset.angle = 0;
+  el.dataset.color = '#000000';
+  drawBoneco(el);
   makeDraggable(el);
   el.onclick = () => {
     selectedBoneco = el;
-    colorInput.value = rgbToHex(getComputedStyle(el).color);
+    colorInput.value = el.dataset.color;
     angleInput.value = el.dataset.angle;
     modal.classList.remove('hidden');
   };
@@ -71,14 +74,18 @@ function createBoneco() {
   return el;
 }
 
-function rgbToHex(rgb) {
-  const res = rgb.match(/\d+/g).map(Number);
-  return (
-    '#' +
-    res
-      .map(x => x.toString(16).padStart(2, '0'))
-      .join('')
-  );
+function drawBoneco(el) {
+  const ctx = el.getContext('2d');
+  ctx.clearRect(0, 0, el.width, el.height);
+  ctx.save();
+  ctx.translate(el.width / 2, el.height / 2);
+  ctx.rotate((parseFloat(el.dataset.angle) || 0) * Math.PI / 180);
+  ctx.fillStyle = el.dataset.color || '#000';
+  ctx.font = `${BONECO_SIZE}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('🧍', 0, 0);
+  ctx.restore();
 }
 
 bonecoIcon.addEventListener('mousedown', e => {
@@ -148,9 +155,9 @@ saveSessionBtn.onclick = saveCurrentSession;
 
 document.getElementById('boneco-ok').onclick = () => {
   if (selectedBoneco) {
-    selectedBoneco.style.color = colorInput.value;
+    selectedBoneco.dataset.color = colorInput.value;
     selectedBoneco.dataset.angle = angleInput.value;
-    selectedBoneco.style.transform = `rotate(${angleInput.value}deg)`;
+    drawBoneco(selectedBoneco);
   }
   modal.classList.add('hidden');
 };

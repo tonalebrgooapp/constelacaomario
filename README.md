@@ -6,6 +6,7 @@ Interface simples para posicionar bonecos dentro de um círculo e salvar sessõe
 
 - Arraste o ícone do boneco para o círculo para adicioná-lo
 - Clique no boneco para alterar cor e ângulo
+- Bonecos são desenhados em canvas e rotacionam em torno do próprio centro
 - Arraste para reposicionar (movimento limitado ao interior do círculo)
 - Crie novas sessões e salve no armazenamento local (localStorage)
 - Selecione uma sessão existente para editar
