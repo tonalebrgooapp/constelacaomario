@@ -36,6 +36,8 @@ body {
   position: absolute;
   cursor: move;
   user-select: none;
+  width: 200px;
+  height: 200px;
 }
 
 #toolbar {
