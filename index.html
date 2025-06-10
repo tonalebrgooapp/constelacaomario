@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Constelação Familiar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="sidebar">
+    <h2>Sessões</h2>
+    <div id="session-list"></div>
+    <button id="new-session">Nova sessão</button>
+    <button id="save-session">Salvar</button>
+  </div>
+  <div id="main">
+    <div id="circle"></div>
+    <div id="toolbar">
+      <div id="boneco-icon">🧍</div>
+    </div>
+  </div>
+
+  <div id="boneco-modal" class="hidden">
+    <label>Cor: <input type="color" id="boneco-color" /></label>
+    <label>Ângulo: <input type="number" id="boneco-angle" min="0" max="360" /></label>
+    <button id="boneco-ok">OK</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
